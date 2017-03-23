@@ -8,7 +8,7 @@ FloatView* floatView = [[FloatView alloc] initWithImage:[UIImage imageNamed:@"Fl
 创建方式二：
 FloatView* floatView = [FloatView new];
 [floatView setImageWithName:@"FloatBonus"];
-FloatView* floatView = [FloatView new];
+
 floatView.stayAlpha = 0.3;
 floatView.stayMode = STAYMODE_RIGHT;
 [floatView setTapActionWithBlock:^{
