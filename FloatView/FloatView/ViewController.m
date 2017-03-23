@@ -19,7 +19,9 @@
 {
     [super viewDidLoad];
     
+//    FloatView* floatView = [[FloatView alloc] initWithImage:[UIImage imageNamed:@"FloatBonus"]];
     FloatView* floatView = [FloatView new];
+    [floatView setImageWithName:@"FloatBonus"];
     floatView.stayAlpha = 0.3;
     floatView.stayMode = STAYMODE_RIGHT;
     [floatView setTapActionWithBlock:^{

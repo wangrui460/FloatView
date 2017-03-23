@@ -19,15 +19,23 @@ typedef NS_ENUM(NSInteger, StayMode) {
 };
 
 @interface FloatView : UIImageView
+
 /** 悬浮图片停留的方式(默认为STAYMODE_LEFTANDRIGHT) */
 @property (nonatomic, assign) StayMode stayMode;
+
 /** 悬浮图片停留时的透明度（stayAlpha >= 0，1：不透明，默认为不透明） */
 @property (nonatomic, assign) CGFloat stayAlpha;
+
 /** 悬浮图片左右边距(默认5)*/
 @property (nonatomic, assign) CGFloat stayEdgeDistance;
+
 /** 悬浮图片停靠的动画事件(默认0.3秒)*/
 @property (nonatomic, assign) CGFloat stayAnimateTime;
 
 /** 设置简单的轻点 block事件 */
 - (void)setTapActionWithBlock:(void (^)(void))block;
+
+/** 根据 imageName 改变FloatView的image */
+- (void)setImageWithName:(NSString *)imageName;
+
 @end

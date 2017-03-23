@@ -17,6 +17,16 @@ static char kJLActionHandlerTapGestureKey;
 
 @implementation FloatView
 
+- (instancetype)initWithImage:(UIImage *)image
+{
+    if (self = [super initWithImage:image]) {
+        self.userInteractionEnabled = YES;
+        self.stayEdgeDistance = 5;
+        self.stayAnimateTime = 0.3;
+        [self initStayLocation];
+    }
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -210,6 +220,11 @@ static char kJLActionHandlerTapGestureKey;
         stayAlpha = 1;
     }
     _stayAlpha = stayAlpha;
+}
+
+- (void)setImageWithName:(NSString *)imageName
+{
+    self.image = [UIImage imageNamed:imageName];
 }
 
 @end
