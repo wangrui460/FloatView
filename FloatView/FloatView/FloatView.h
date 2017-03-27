@@ -38,4 +38,7 @@ typedef NS_ENUM(NSInteger, StayMode) {
 /** 根据 imageName 改变FloatView的image */
 - (void)setImageWithName:(NSString *)imageName;
 
+/** 当滚动的时候悬浮图片居中在屏幕边缘 */
+- (void)facingScreenBorderWhenScrolling;
+
 @end

@@ -65,9 +65,8 @@ static char kActionHandlerTapGestureKey;
 {
     [self moveStay];
     // 这里可以设置过几秒，alpha减小
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        __strong typeof(self) pThis = weakSelf;
 //        [pThis animateHidden];
     });
 }
@@ -116,11 +115,11 @@ static char kActionHandlerTapGestureKey;
 #pragma mark - 设置悬浮图片以动画的方式隐藏
 - (void)animateHidden
 {
-    {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.alpha = _stayAlpha;
-        }];
-    }
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0.5 animations:^{
+        __strong typeof(self) pThis = weakSelf;
+        pThis.alpha = _stayAlpha;
+    }];
 }
 
 #pragma mark - 移动当前view到屏幕左边
@@ -129,8 +128,10 @@ static char kActionHandlerTapGestureKey;
     CGRect frame = self.frame;
     frame.origin.x = self.stayEdgeDistance;
     frame.origin.y = [self moveSafeLocationY];
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:_stayAnimateTime animations:^{
-        self.frame = frame;
+        __strong typeof(self) pThis = weakSelf;
+        pThis.frame = frame;
     }];
 }
 
@@ -141,7 +142,9 @@ static char kActionHandlerTapGestureKey;
     CGFloat stayWidth = frame.size.width;
     frame.origin.x = kScreenWidth - self.stayEdgeDistance - stayWidth;
     frame.origin.y = [self moveSafeLocationY];
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:_stayAnimateTime animations:^{
+        __strong typeof(self) pThis = weakSelf;
         self.frame = frame;
     }];
 }
@@ -159,7 +162,7 @@ static char kActionHandlerTapGestureKey;
     if (curY <= stayMostTopY) {
         destinationY = stayMostTopY;
     }
-    // 悬浮图片的低端Y值
+    // 悬浮图片的底端Y值
     CGFloat stayMostBottomY = kScreenHeight - TabBarHeight - _stayEdgeDistance - stayHeight;
     if (curY >= stayMostBottomY) {
         destinationY = stayMostBottomY;
@@ -179,6 +182,33 @@ static char kActionHandlerTapGestureKey;
     } else {
         return NO;
     }
+}
+
+#pragma mark - 当滚动的时候悬浮图片居中在屏幕边缘
+- (void)facingScreenBorderWhenScrolling
+{
+    bool isLeft = [self judgeLocationIsLeft];
+    [self moveStayToMiddleInScreenBorder:isLeft];
+}
+
+// 悬浮图片居中在屏幕边缘
+- (void)moveStayToMiddleInScreenBorder:(BOOL)isLeft
+{
+    CGRect frame = self.frame;
+    CGFloat stayWidth = frame.size.width;
+    CGFloat destinationX;
+    if (isLeft == YES) {
+        destinationX = - stayWidth/2;
+    }
+    else {
+        destinationX = kScreenWidth - stayWidth + stayWidth/2;
+    }
+    frame.origin.x = destinationX;
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0.2 animations:^{
+        __strong typeof(self) pThis = weakSelf;
+        pThis.frame = frame;
+    }];
 }
 
 #pragma mark -  设置简单的轻点 block事件
