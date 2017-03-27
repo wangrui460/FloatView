@@ -24,7 +24,6 @@
 //    self.floatView = [[FloatView alloc] initWithImage:[UIImage imageNamed:@"FloatBonus"]];
     self.floatView = [FloatView new];
     [self.floatView setImageWithName:@"FloatBonus"];
-    self.floatView.stayAlpha = 0.3;
     self.floatView.stayMode = STAYMODE_LEFTANDRIGHT;
     [self.floatView setTapActionWithBlock:^{
         NSLog(@"跳转到邀请好友界面");
@@ -36,6 +35,16 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self.floatView moveTohalfInScreenWhenScrolling];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.floatView setCurrentAlpha:0.5];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self.floatView setCurrentAlpha:1];
 }
 
 - (UITableView *)tableView

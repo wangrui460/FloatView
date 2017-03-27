@@ -112,16 +112,6 @@ static char kActionHandlerTapGestureKey;
     }
 }
 
-#pragma mark - 设置悬浮图片以动画的方式隐藏
-- (void)animateHidden
-{
-    __weak typeof(self) weakSelf = self;
-    [UIView animateWithDuration:0.5 animations:^{
-        __strong typeof(self) pThis = weakSelf;
-        pThis.alpha = _stayAlpha;
-    }];
-}
-
 #pragma mark - 移动到屏幕边缘
 - (void)moveToBorder:(BOOL)isLeft
 {
@@ -207,6 +197,15 @@ static char kActionHandlerTapGestureKey;
     }];
 }
 
+#pragma mark - 设置当前浮动图片的透明度
+- (void)setCurrentAlpha:(CGFloat)stayAlpha
+{
+    if (stayAlpha <= 0) {
+        stayAlpha = 1;
+    }
+    self.alpha = stayAlpha;
+}
+
 #pragma mark -  设置简单的轻点 block事件
 - (void)setTapActionWithBlock:(void (^)(void))block
 {
@@ -243,14 +242,6 @@ static char kActionHandlerTapGestureKey;
 }
 
 #pragma mark - getter / setter
-- (void)setStayAlpha:(CGFloat)stayAlpha
-{
-    if (stayAlpha <= 0) {
-        stayAlpha = 1;
-    }
-    _stayAlpha = stayAlpha;
-}
-
 - (void)setImageWithName:(NSString *)imageName
 {
     self.image = [UIImage imageNamed:imageName];

@@ -23,9 +23,6 @@ typedef NS_ENUM(NSInteger, StayMode) {
 /** 悬浮图片停留的方式(默认为STAYMODE_LEFTANDRIGHT) */
 @property (nonatomic, assign) StayMode stayMode;
 
-/** 悬浮图片停留时的透明度（stayAlpha >= 0，1：不透明，默认为不透明） */
-@property (nonatomic, assign) CGFloat stayAlpha;
-
 /** 悬浮图片左右边距(默认5)*/
 @property (nonatomic, assign) CGFloat stayEdgeDistance;
 
@@ -40,5 +37,8 @@ typedef NS_ENUM(NSInteger, StayMode) {
 
 /** 当滚动的时候悬浮图片居中在屏幕边缘 */
 - (void)moveTohalfInScreenWhenScrolling;
+
+/** 设置当前浮动图片的透明度 */
+- (void)setCurrentAlpha:(CGFloat)stayAlpha;
 
 @end
