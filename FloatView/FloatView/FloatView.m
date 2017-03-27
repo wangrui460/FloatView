@@ -90,21 +90,17 @@ static char kActionHandlerTapGestureKey;
     switch (_stayMode) {
         case STAYMODE_LEFTANDRIGHT:
         {
-            if (isLeft == YES) {
-                [self moveToLeft];
-            } else {
-                [self moveToRight];
-            }
+            [self moveToBorder:isLeft];
         }
             break;
         case STAYMODE_LEFT:
         {
-            [self moveToLeft];
+            [self moveToBorder:YES];
         }
             break;
         case STAYMODE_RIGHT:
         {
-            [self moveToRight];
+            [self moveToBorder:NO];
         }
             break;
         default:
@@ -122,30 +118,24 @@ static char kActionHandlerTapGestureKey;
     }];
 }
 
-#pragma mark - 移动当前view到屏幕左边
-- (void)moveToLeft
+#pragma mark - 移动到屏幕边缘
+- (void)moveToBorder:(BOOL)isLeft
 {
     CGRect frame = self.frame;
-    frame.origin.x = self.stayEdgeDistance;
+    CGFloat destinationX;
+    if (isLeft) {
+        destinationX = self.stayEdgeDistance;
+    }
+    else {
+        CGFloat stayWidth = frame.size.width;
+        destinationX = kScreenWidth - self.stayEdgeDistance - stayWidth;
+    }
+    frame.origin.x = destinationX;
     frame.origin.y = [self moveSafeLocationY];
     __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:_stayAnimateTime animations:^{
         __strong typeof(self) pThis = weakSelf;
         pThis.frame = frame;
-    }];
-}
-
-#pragma mark - 移动当前view到屏幕右边
-- (void)moveToRight
-{
-    CGRect frame = self.frame;
-    CGFloat stayWidth = frame.size.width;
-    frame.origin.x = kScreenWidth - self.stayEdgeDistance - stayWidth;
-    frame.origin.y = [self moveSafeLocationY];
-    __weak typeof(self) weakSelf = self;
-    [UIView animateWithDuration:_stayAnimateTime animations:^{
-        __strong typeof(self) pThis = weakSelf;
-        self.frame = frame;
     }];
 }
 

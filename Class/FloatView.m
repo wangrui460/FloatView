@@ -11,12 +11,24 @@
 
 #define NavBarBottom 64
 #define TabBarHeight 49
+#define kScreenWidth  [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
-static char kJLActionHandlerTapBlockKey;
-static char kJLActionHandlerTapGestureKey;
+static char kActionHandlerTapBlockKey;
+static char kActionHandlerTapGestureKey;
 
 @implementation FloatView
 
+- (instancetype)initWithImage:(UIImage *)image
+{
+    if (self = [super initWithImage:image]) {
+        self.userInteractionEnabled = YES;
+        self.stayEdgeDistance = 5;
+        self.stayAnimateTime = 0.3;
+        [self initStayLocation];
+    }
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -53,9 +65,8 @@ static char kJLActionHandlerTapGestureKey;
 {
     [self moveStay];
     // 这里可以设置过几秒，alpha减小
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        __strong typeof(self) pThis = weakSelf;
 //        [pThis animateHidden];
     });
 }
@@ -63,12 +74,10 @@ static char kJLActionHandlerTapGestureKey;
 #pragma mark - 设置浮动图片的初始位置
 - (void)initStayLocation
 {
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
     CGRect frame = self.frame;
     CGFloat stayWidth = frame.size.width;
-    CGFloat initX = screenWidth - self.stayEdgeDistance - stayWidth;
-    CGFloat initY = (screenHeight - NavBarBottom - TabBarHeight) * (2.0 / 3.0) + NavBarBottom;
+    CGFloat initX = kScreenWidth - self.stayEdgeDistance - stayWidth;
+    CGFloat initY = (kScreenHeight - NavBarBottom - TabBarHeight) * (2.0 / 3.0) + NavBarBottom;
     frame.origin.x = initX;
     frame.origin.y = initY;
     self.frame = frame;
@@ -81,21 +90,17 @@ static char kJLActionHandlerTapGestureKey;
     switch (_stayMode) {
         case STAYMODE_LEFTANDRIGHT:
         {
-            if (isLeft == YES) {
-                [self moveToLeft];
-            } else {
-                [self moveToRight];
-            }
+            [self moveToBorder:isLeft];
         }
             break;
         case STAYMODE_LEFT:
         {
-            [self moveToLeft];
+            [self moveToBorder:YES];
         }
             break;
         case STAYMODE_RIGHT:
         {
-            [self moveToRight];
+            [self moveToBorder:NO];
         }
             break;
         default:
@@ -106,41 +111,37 @@ static char kJLActionHandlerTapGestureKey;
 #pragma mark - 设置悬浮图片以动画的方式隐藏
 - (void)animateHidden
 {
-    {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.alpha = _stayAlpha;
-        }];
-    }
-}
-
-#pragma mark - 移动当前view到屏幕左边
-- (void)moveToLeft
-{
-    CGRect frame = self.frame;
-    frame.origin.x = self.stayEdgeDistance;
-    frame.origin.y = [self moveSafeLocationY];
-    [UIView animateWithDuration:_stayAnimateTime animations:^{
-        self.frame = frame;
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0.5 animations:^{
+        __strong typeof(self) pThis = weakSelf;
+        pThis.alpha = _stayAlpha;
     }];
 }
 
-#pragma mark - 移动当前view到屏幕右边
-- (void)moveToRight
+#pragma mark - 移动到屏幕边缘
+- (void)moveToBorder:(BOOL)isLeft
 {
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGRect frame = self.frame;
-    CGFloat stayWidth = frame.size.width;
-    frame.origin.x = screenWidth - self.stayEdgeDistance - stayWidth;
+    CGFloat destinationX;
+    if (isLeft) {
+        destinationX = self.stayEdgeDistance;
+    }
+    else {
+        CGFloat stayWidth = frame.size.width;
+        destinationX = kScreenWidth - self.stayEdgeDistance - stayWidth;
+    }
+    frame.origin.x = destinationX;
     frame.origin.y = [self moveSafeLocationY];
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:_stayAnimateTime animations:^{
-        self.frame = frame;
+        __strong typeof(self) pThis = weakSelf;
+        pThis.frame = frame;
     }];
 }
 
 #pragma mark - 设置悬浮图片不高于屏幕顶端，不低于屏幕底端
 - (CGFloat)moveSafeLocationY
 {
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
     CGRect frame = self.frame;
     CGFloat stayHeight = frame.size.height;
     // 当前view的y值
@@ -151,8 +152,8 @@ static char kJLActionHandlerTapGestureKey;
     if (curY <= stayMostTopY) {
         destinationY = stayMostTopY;
     }
-    // 悬浮图片的低端Y值
-    CGFloat stayMostBottomY = screenHeight - TabBarHeight - _stayEdgeDistance - stayHeight;
+    // 悬浮图片的底端Y值
+    CGFloat stayMostBottomY = kScreenHeight - TabBarHeight - _stayEdgeDistance - stayHeight;
     if (curY >= stayMostBottomY) {
         destinationY = stayMostBottomY;
     }
@@ -173,26 +174,53 @@ static char kJLActionHandlerTapGestureKey;
     }
 }
 
+#pragma mark - 当滚动的时候悬浮图片居中在屏幕边缘
+- (void)facingScreenBorderWhenScrolling
+{
+    bool isLeft = [self judgeLocationIsLeft];
+    [self moveStayToMiddleInScreenBorder:isLeft];
+}
+
+// 悬浮图片居中在屏幕边缘
+- (void)moveStayToMiddleInScreenBorder:(BOOL)isLeft
+{
+    CGRect frame = self.frame;
+    CGFloat stayWidth = frame.size.width;
+    CGFloat destinationX;
+    if (isLeft == YES) {
+        destinationX = - stayWidth/2;
+    }
+    else {
+        destinationX = kScreenWidth - stayWidth + stayWidth/2;
+    }
+    frame.origin.x = destinationX;
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0.2 animations:^{
+        __strong typeof(self) pThis = weakSelf;
+        pThis.frame = frame;
+    }];
+}
+
 #pragma mark -  设置简单的轻点 block事件
 - (void)setTapActionWithBlock:(void (^)(void))block
 {
-    UITapGestureRecognizer *gesture = objc_getAssociatedObject(self, &kJLActionHandlerTapGestureKey);
+    UITapGestureRecognizer *gesture = objc_getAssociatedObject(self, &kActionHandlerTapGestureKey);
     
     if (!gesture)
     {
         gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(__handleActionForTapGesture:)];
         [self addGestureRecognizer:gesture];
-        objc_setAssociatedObject(self, &kJLActionHandlerTapGestureKey, gesture, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, &kActionHandlerTapGestureKey, gesture, OBJC_ASSOCIATION_RETAIN);
     }
     
-    objc_setAssociatedObject(self, &kJLActionHandlerTapBlockKey, block, OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &kActionHandlerTapBlockKey, block, OBJC_ASSOCIATION_COPY);
 }
 
 - (void)__handleActionForTapGesture:(UITapGestureRecognizer *)gesture
 {
     if (gesture.state == UIGestureRecognizerStateRecognized)
     {
-        void(^action)(void) = objc_getAssociatedObject(self, &kJLActionHandlerTapBlockKey);
+        void(^action)(void) = objc_getAssociatedObject(self, &kActionHandlerTapBlockKey);
         if (action)
         {
             // 先让悬浮图片的alpha为1
@@ -210,6 +238,11 @@ static char kJLActionHandlerTapGestureKey;
         stayAlpha = 1;
     }
     _stayAlpha = stayAlpha;
+}
+
+- (void)setImageWithName:(NSString *)imageName
+{
+    self.image = [UIImage imageNamed:imageName];
 }
 
 @end
