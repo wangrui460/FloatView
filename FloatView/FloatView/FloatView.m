@@ -18,6 +18,9 @@ static char kActionHandlerTapBlockKey;
 static char kActionHandlerTapGestureKey;
 
 @implementation FloatView
+{
+    BOOL mIsHalfInScreen;
+}
 
 - (instancetype)initWithImage:(UIImage *)image
 {
@@ -81,6 +84,7 @@ static char kActionHandlerTapGestureKey;
     frame.origin.x = initX;
     frame.origin.y = initY;
     self.frame = frame;
+    mIsHalfInScreen = NO;
 }
 
 #pragma mark - 根据 stayModel 来移动悬浮图片
@@ -137,9 +141,10 @@ static char kActionHandlerTapGestureKey;
         __strong typeof(self) pThis = weakSelf;
         pThis.frame = frame;
     }];
+    mIsHalfInScreen = NO;
 }
 
-#pragma mark - 设置悬浮图片不高于屏幕顶端，不低于屏幕底端
+// 设置悬浮图片不高于屏幕顶端，不低于屏幕底端
 - (CGFloat)moveSafeLocationY
 {
     CGRect frame = self.frame;
@@ -175,10 +180,11 @@ static char kActionHandlerTapGestureKey;
 }
 
 #pragma mark - 当滚动的时候悬浮图片居中在屏幕边缘
-- (void)facingScreenBorderWhenScrolling
+- (void)moveTohalfInScreenWhenScrolling
 {
     bool isLeft = [self judgeLocationIsLeft];
     [self moveStayToMiddleInScreenBorder:isLeft];
+    mIsHalfInScreen = YES;
 }
 
 // 悬浮图片居中在屏幕边缘
@@ -225,8 +231,12 @@ static char kActionHandlerTapGestureKey;
         {
             // 先让悬浮图片的alpha为1
             self.alpha = 1;
-            [self moveStay];
-            action();
+            if (mIsHalfInScreen == NO) {
+                action();
+            }
+            else {
+                [self moveStay];
+            }
         }
     }
 }

@@ -39,6 +39,6 @@ typedef NS_ENUM(NSInteger, StayMode) {
 - (void)setImageWithName:(NSString *)imageName;
 
 /** 当滚动的时候悬浮图片居中在屏幕边缘 */
-- (void)facingScreenBorderWhenScrolling;
+- (void)moveTohalfInScreenWhenScrolling;
 
 @end

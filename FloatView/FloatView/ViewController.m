@@ -35,7 +35,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [self.floatView facingScreenBorderWhenScrolling];
+    [self.floatView moveTohalfInScreenWhenScrolling];
 }
 
 - (UITableView *)tableView
