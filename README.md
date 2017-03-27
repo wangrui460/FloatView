@@ -1,5 +1,6 @@
 # FloatView
-浮动图片
+浮动图片  
+
 ![image](https://github.com/wangrui460/FloatView/raw/master/screenshots/FloatView.gif)
 
 ### 使用方式
