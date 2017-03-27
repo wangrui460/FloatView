@@ -210,11 +210,12 @@ static char kActionHandlerTapGestureKey;
 #pragma mark -  设置简单的轻点 block事件
 - (void)setTapActionWithBlock:(void (^)(void))block
 {
+    // 为gesture添加关联是为了gesture只创建一次，objc_getAssociatedObject如果返回nil就创建一次
     UITapGestureRecognizer *gesture = objc_getAssociatedObject(self, &kActionHandlerTapGestureKey);
     
     if (!gesture)
     {
-        gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(__handleActionForTapGesture:)];
+        gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleActionForTapGesture:)];
         [self addGestureRecognizer:gesture];
         objc_setAssociatedObject(self, &kActionHandlerTapGestureKey, gesture, OBJC_ASSOCIATION_RETAIN);
     }
@@ -222,7 +223,7 @@ static char kActionHandlerTapGestureKey;
     objc_setAssociatedObject(self, &kActionHandlerTapBlockKey, block, OBJC_ASSOCIATION_COPY);
 }
 
-- (void)__handleActionForTapGesture:(UITapGestureRecognizer *)gesture
+- (void)handleActionForTapGesture:(UITapGestureRecognizer *)gesture
 {
     if (gesture.state == UIGestureRecognizerStateRecognized)
     {
