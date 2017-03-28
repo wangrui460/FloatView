@@ -161,7 +161,7 @@ static char kActionHandlerTapGestureKey;
     // 手机屏幕中间位置x值
     CGFloat middleX = [UIScreen mainScreen].bounds.size.width / 2.0;
     // 当前view的x值
-    CGFloat curX = self.frame.origin.x;
+    CGFloat curX = self.frame.origin.x + self.bounds.size.width/2;
     if (curX <= middleX) {
         return YES;
     } else {
