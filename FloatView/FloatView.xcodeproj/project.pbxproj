@@ -16,6 +16,7 @@
 		1A89477B1E7AE73E00667E81 /* FloatViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A89477A1E7AE73E00667E81 /* FloatViewTests.m */; };
 		1A8947861E7AE73E00667E81 /* FloatViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A8947851E7AE73E00667E81 /* FloatViewUITests.m */; };
 		1AD3D4761E7BD1A200DC965F /* FloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AD3D4751E7BD1A200DC965F /* FloatView.m */; };
+		EA1FB0C11F5D49B20074CD3C /* FloatView+Touch.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1FB0C01F5D49B20074CD3C /* FloatView+Touch.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		1A8947871E7AE73E00667E81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AD3D4741E7BD1A200DC965F /* FloatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatView.h; sourceTree = "<group>"; };
 		1AD3D4751E7BD1A200DC965F /* FloatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloatView.m; sourceTree = "<group>"; };
+		EA1FB0BF1F5D49B20074CD3C /* FloatView+Touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FloatView+Touch.h"; sourceTree = "<group>"; };
+		EA1FB0C01F5D49B20074CD3C /* FloatView+Touch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FloatView+Touch.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +107,7 @@
 		1A89475F1E7AE73D00667E81 /* FloatView */ = {
 			isa = PBXGroup;
 			children = (
+				EA1FB0BE1F5D49B20074CD3C /* touch */,
 				1AD3D4741E7BD1A200DC965F /* FloatView.h */,
 				1AD3D4751E7BD1A200DC965F /* FloatView.m */,
 				1A8947631E7AE73D00667E81 /* AppDelegate.h */,
@@ -143,6 +147,15 @@
 				1A8947871E7AE73E00667E81 /* Info.plist */,
 			);
 			path = FloatViewUITests;
+			sourceTree = "<group>";
+		};
+		EA1FB0BE1F5D49B20074CD3C /* touch */ = {
+			isa = PBXGroup;
+			children = (
+				EA1FB0BF1F5D49B20074CD3C /* FloatView+Touch.h */,
+				EA1FB0C01F5D49B20074CD3C /* FloatView+Touch.m */,
+			);
+			path = touch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,7 +225,7 @@
 				TargetAttributes = {
 					1A89475C1E7AE73D00667E81 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = 652U6LDTX4;
+						DevelopmentTeam = C353C7Q7J9;
 						ProvisioningStyle = Automatic;
 					};
 					1A8947751E7AE73E00667E81 = {
@@ -281,6 +294,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA1FB0C11F5D49B20074CD3C /* FloatView+Touch.m in Sources */,
 				1A8947681E7AE73E00667E81 /* ViewController.m in Sources */,
 				1A8947651E7AE73D00667E81 /* AppDelegate.m in Sources */,
 				1A8947621E7AE73D00667E81 /* main.m in Sources */,
@@ -433,7 +447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 652U6LDTX4;
+				DEVELOPMENT_TEAM = C353C7Q7J9;
 				INFOPLIST_FILE = FloatView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = video.wangrui.com.FloatView;
@@ -445,7 +459,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 652U6LDTX4;
+				DEVELOPMENT_TEAM = C353C7Q7J9;
 				INFOPLIST_FILE = FloatView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = video.wangrui.com.FloatView;
