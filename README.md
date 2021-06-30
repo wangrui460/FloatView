@@ -20,4 +20,6 @@ floatView.stayMode = STAYMODE_RIGHT;
 </code></pre>
 
 
-你觉得对你有所帮助的话，请献上宝贵的Star！！！ 不胜感激！！！
+### 联系我
+扫码回复1获取面试资料（持续更新）
+![](https://user-images.githubusercontent.com/11909313/123933944-6a4abe00-d9c5-11eb-83ca-379313a2af7c.png)
