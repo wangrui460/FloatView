@@ -1,4 +1,9 @@
-# FloatView
+## iOS 技术交流
+我创建了一个 微信 iOS 技术交流群，欢迎小伙伴们加入一起交流学习~
+	
+可以加我微信我拉你进去（备注iOS），我的微信号 wr1204607318
+
+## FloatView
 浮动图片  
 
 ![image](https://github.com/wangrui460/FloatView/raw/master/screenshots/FloatView.gif)
